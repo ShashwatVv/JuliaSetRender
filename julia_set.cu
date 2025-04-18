@@ -163,11 +163,12 @@ int main()
     
     /* Call the julia kernel */
     juliaKernelRGB<<<numBlocks, threadsPerBlock>>>(device_output, cx, cy);
-    /* if you are using Linux, need to call this */
+    
+    /* if you are using Linux, need to call this and wait for threads to finish */
     /* On windows, I didn't face the issue */
     cudaDeviceSynchronize();
 
-    cudaMemcpy(host_output, device_output, size, cudaMemcpyDeviceToHost);
+    (void)cudaMemcpy(host_output, device_output, size, cudaMemcpyDeviceToHost);
 
     save_ppm_color("julia_color.ppm", host_output);
     
